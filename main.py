@@ -15,9 +15,9 @@ img_back = "sky.png" # фон игры
 img_hero = "rocket.png" # герой
 img_enemy = "ball.png" # враг
  
-score = 0 # сбито кораблей
-goal = 10 # столько кораблей нужно сбить для победы
-lost = 0 # пропущено кораблей
+score = 0 # сбито 'кораблей'
+goal = 10 # столько 'кораблей' нужно сбить для победы
+lost = 0 # пропущено 'кораблей'
 max_lost = 3 # проиграли, если пропустили столько
  
 # класс-родитель для других спрайтов
@@ -45,24 +45,28 @@ class Player(GameSprite):
     # метод для управления спрайтом стрелками клавиатуры
     def update1(self):
         keys = key.get_pressed()
-        if keys[K_w] and self.rect.x > 5:
+        if keys[K_w] and self.rect.y > 5:
             self.rect.y -= self.speed
-        if keys[K_s] and self.rect.x < win_width - 80:
+        if keys[K_s] and self.rect.y < win_height - 80:
             self.rect.y += self.speed
 
-     def update2(self):
+    def update2(self):
         keys = key.get_pressed()
-        if keys[K_UP] and self.rect.x > 5:
+        if keys[K_UP] and self.rect.y > 5:
             self.rect.y -= self.speed
-        if keys[K_DOWN] and self.rect.x < win_width - 80:
+        if keys[K_DOWN] and self.rect.y < win_height - 80:
             self.rect.y += self.speed
 
+
+s_y = 1
+s_x = 1
 class Enemy(GameSprite):
     # движение врага
     def update(self):
-        self.rect.y += self.speed
-        self.rect.x += self.speed
-        global lost
+        global s_y, s_x
+        self.rect.y += s_y
+        self.rect.x += s_x
+
         # исчезает, если дойдет до края экрана
         if self.rect.y > win_height - 40 or self.rect.y < 0:
             self.speed *= -1
@@ -70,7 +74,7 @@ class Enemy(GameSprite):
  
 win_width = 700
 win_height = 500
-display.set_caption("Pin-Pong")
+display.set_caption("Ping-Pong")
 window = display.set_mode((win_width, win_height))
 background = transform.scale(image.load(img_back), (win_width, win_height))
 
@@ -89,6 +93,15 @@ while run:
             if e.key == K_SPACE:
                 fire_sound.play()
                 ship.fire()
+            if  ball.rect.y < 0:
+                s_y *= -1
+            if ball.rect.x > 450 or ball.rect.x < 0:
+                s_x *= -1
+            if ball.rect.colliderect(Enemy.rect):
+                s_y *= -1
+
+
+
  
 
     if not finish:
