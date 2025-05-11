@@ -58,8 +58,8 @@ class Player(GameSprite):
             self.rect.y += self.speed
 
 
-s_y = 1
-s_x = 1
+s_y = 7
+s_x = 7
 class Enemy(GameSprite):
     # движение врага
     def update(self):
@@ -70,8 +70,8 @@ class Enemy(GameSprite):
         # исчезает, если дойдет до края экрана
         if self.rect.y > win_height - 40 or self.rect.y < 0:
             self.speed *= -1
- 
- 
+
+
 win_width = 700
 win_height = 500
 display.set_caption("Ping-Pong")
@@ -93,12 +93,12 @@ while run:
             if e.key == K_SPACE:
                 fire_sound.play()
                 ship.fire()
-            if  ball.rect.y < 0:
-                s_y *= -1
-            if ball.rect.x > 450 or ball.rect.x < 0:
-                s_x *= -1
-            if ball.rect.colliderect(Enemy.rect):
-                s_y *= -1
+    if  ball.rect.y < 0 or ball.rect.y > 450:
+        s_y *= -1
+    if ball.rect.x > 680 or ball.rect.x < 0:
+        print('Проигрыш')
+    if ball.rect.colliderect(rocket1.rect) or ball.rect.colliderect(rocket2.rect):
+       s_x *= -1
 
 
 
@@ -114,4 +114,4 @@ while run:
         rocket2.update2()
         display.update()
 
-    time.delay(50)
+    time.delay(30)
